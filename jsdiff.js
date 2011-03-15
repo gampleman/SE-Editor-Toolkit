@@ -159,12 +159,13 @@ function diff( o, n ) {
   return { o: o, n: n };
 }
 
-var showdown;
+
 
 var previewing = true;
 var toggle;
 var orig = document.getElementById('wmd-input').value;
 
+/* Event handler for keup & change events */
 function change() {
   el = document.querySelector('#post-editor>#diff')
   el.innerHTML = diffString(orig, document.getElementById('wmd-input').value);

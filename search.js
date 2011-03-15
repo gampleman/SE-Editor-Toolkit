@@ -1,20 +1,28 @@
-var current_re;
-var last_start;
+var current_re; // Stores the regexp object so that we can have incremental search
+var last_start; // Stores last begining of match for Replace & Find
+
+
 function doSearch () {
   recreateRegexp();
   findNext();
 }
-
+/* Constructs regexp based on fields */
 function recreateRegexp() {
   current_re = RegExp(document.getElementById('search-find').value, modifiers(true));
 }
 
+/*
+  Selects in the text are the next occurence of the search string
+*/
 function findNext() {
   var res = current_re.exec(document.getElementById('wmd-input').value);
   last_start = current_re.lastIndex - res[0].length;
   document.getElementById('wmd-input').setSelectionRange(last_start, current_re.lastIndex);
 }
 
+/* 
+  Creates the modifiers part of the regex, pass true to have the global flag
+*/
 function modifiers() {
   base = "m";
   if(!document.getElementById('search-casesensitive').checked) {
@@ -26,6 +34,9 @@ function modifiers() {
   return base;
 }
 
+/*
+  Creates the search UI and sets up the various event handlers
+*/
 function setupSearchUI () {
   var d = document.createElement('div');
 
@@ -33,10 +44,10 @@ function setupSearchUI () {
   document.querySelector('#wmd-button-bar').appendChild(d.children[0]);
   document.querySelector('#wmd-button-bar').style.height = "50px";
   
+  // The regex change, recreate it
   document.getElementById('search-find').addEventListener('change', recreateRegexp, false);
   document.getElementById('search-casesensitive').addEventListener('change', recreateRegexp, false);
-  
-  
+  // Enter pressed, comence searching
   document.getElementById('snr-form').addEventListener('submit', function(ev) { 
     ev.preventDefault(); 
     doSearch();

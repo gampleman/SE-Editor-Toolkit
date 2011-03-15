@@ -46,6 +46,15 @@ function actOnSelection (callback, actOnTitle) {
 
 var buttons = [];
 
+/*
+  Constructs a button in the toolbar.
+  Pass an object with the following keys:
+    - name: what's displayed in the toolbar
+    - title: tooltip [optional]
+    - id: id of the element (will have -button apended) [optional]
+    - pos: right offset of the button
+    - callback: a function to invoke when the button is clicked
+*/
 function add_button(obj) {
   obj.id = (obj.id == undefined ? obj.name.toLowerCase() : obj.id);
   obj.title = (obj.title == undefined ? obj.name : obj.title);
