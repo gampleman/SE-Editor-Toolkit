@@ -1,0 +1,20 @@
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+   <key>Extension Updates</key>
+   <array>
+     <dict>
+       <key>CFBundleIdentifier</key>
+       <string>eu.gampleman.code.soautoedit</string>
+       <key>Developer Identifier</key>
+       <string>XWURF2R5PN</string>
+       <key>CFBundleVersion</key>
+       <string>2</string>
+       <key>CFBundleShortVersionString</key>
+       <string>1.0.1</string>
+       <key>URL</key>
+       <string>https://github.com/downloads/gampleman/SE-Editor-Toolkit/latest.safariextz</string>
+     </dict>
+   </array>
+</dict>
+</plist>
