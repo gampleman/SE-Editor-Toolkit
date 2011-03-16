@@ -1,14 +1,16 @@
 SE Editing Toolkit
 ==================
 
-Adds a couple of features for easier editing of (mainly crappy) questions on the SE sites. 
+Adds a couple of features for easier editing of (mainly crappy) questions on the SE sites. See http://stackapps.com/questions/2209/se-editor-toolkit for the Stackapps thread.
 
 Contributing
 ------------
 
-The code should be reasonably readable where `toolbar.js` is the file containing some common logic and then each button has it's own file. `jsdiff.js` (suprisingly enough) contains the diffing functionality.
+The code should be reasonably readable where `toolbar.js` is the file containing some common logic and then each button has it's own file. `jsdiff.js` (surprisingly enough) contains the diffing functionality.
 
-Procedure is simple, fork, edit, send pull request. The plugin should be easy to port to any other browser, it is built with very basic js (it uses `querySelector` in a few cases, but this is not necessary and can be easily removed). I'm happy to maintain other versions for other browsers as long as you provide a build script to automatically build the extension from these sourcefiles.
+Procedure is simple, fork, edit, send pull request. The plugin should be easy to port to any other browser, it is built with very basic js (it uses `querySelector` in a few cases, but this is not necessary and can be easily removed). I'm happy to maintain other versions for other browsers as long as you provide a build script to automatically build the extension from these source files.
+
+For example don't be shy to submit a patch to add some proper icons, I'm pretty sure that the current unicode chars are pretty confusing.
 
 Features
 ========
