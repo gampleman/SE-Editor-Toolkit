@@ -8,7 +8,7 @@ function correct(line) {
    "iPhone", "iPhoto", "iPod", "iTunes", "iWeb", "iWork", "JavaScript", "jQuery", "Lenovo",
    "MacBook", "MacPorts", "MHz", "MobileMe", "MySQL", "Nvidia", "OS X", "PowerBook", "PowerPoint",
    "QuickTime", "SSD", "TextEdit", "TextMate", "ThinkPad", "USB", "VMware", "WebKit", "Wi-Fi",
-   "Windows XP", "Xcode", "XMLHttpRequest", "Xserve"];
+   "Windows XP", "WordPress", "Xcode", "XMLHttpRequest", "Xserve"];
   return line
   // convert pronouns from monkeglish/lolcatz
   .replace(/( |^)i( |')/g, "$1I$2")
