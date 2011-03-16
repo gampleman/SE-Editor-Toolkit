@@ -26,7 +26,7 @@
 				<string>jsdiff.js</string>
 				<string>lowercase.js</string>
 				<string>autocorrect.js</string>
-				<string>sane_code.js</string>
+				<string>code_sane.js</string>
 				<string>search.js</string>
 			</array>
 		</dict>
@@ -38,6 +38,8 @@
 			<string>http://serverfault.com/posts/*/edit*</string>
 			<string>http://*.stackexchange.com/posts/*/edit*</string>
 			<string>http://stackapps.com/posts/*/edit*</string>
+			<string>http://askubuntu.com/posts/*/edit*</string>
+			<string>http://answers.onstartups.com/posts/*/edit*</string>
 		</array>
 	</dict>
 	<key>Description</key>
