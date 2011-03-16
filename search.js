@@ -70,6 +70,7 @@ function setupSearchUI () {
     var re = RegExp(document.getElementById('search-find').value, modifiers);
     el.value = el.value.substring(0, el.selectionStart) + el.value.substring(el.selectionStart, el.selectionEnd).replace(re, document.getElementById('search-replace').value) + el.value.substring(el.selectionEnd);
     findNext();
+    change();
   });
   document.getElementById('search-replaceall').addEventListener('click', function(ev) {
     ev.preventDefault();

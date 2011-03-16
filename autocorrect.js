@@ -2,7 +2,7 @@
   This function does all the changes to the code in a serries of replace steps.
 */
 function correct(line) {
-  return line
+  line = line
   // convert pronouns from monkeglish/lolcatz
   .replace(/( |^)i( |')/g, "$1I$2")
   .replace(/( |^)i ?m /ig, "$1I'm ")
@@ -31,14 +31,26 @@ function correct(line) {
   //.replace(/\. ?\. ?/g, ".")
   .replace(/ *\.( ?\.)+ */g, "... ")
   .replace(/ *([\?\!] ?)+ */g, "$1")
-  // product name capitalization (people always get this wrong)
-  .replace(/jquery/ig, "jQuery")
-  .replace(/mysql/ig, "MySQL")
   //correct stuff messed up by this script
   .replace(/\. (\d)/g, ".$1") // digits tend to be version numbers or numerals
   // use of comma is the most common, see http://english.stackexchange.com/questions/16172
   .replace(/e\. *G\.\,? (.)/gi, function() { return "e.g., " + arguments[1].toLowerCase()})
   .replace(/i\. *e\. (.)/gi, function() { return "i.e. " + arguments[1].toLowerCase()});
+  
+  line = fixProductNames(line, ["AppleScript", "Bluetooth", "DivX", "FireWire", "GarageBand", 
+    "iBookstore", "iCal", "iChat", "iLife", "iMac", "iMovie", "iOS", "iPad", "iPhone", "iPhoto", 
+    "iPod", "iTunes", "iWeb", "iWork", "JavaScript", "jQuery", "MacBook", "MacPorts", "MobileMe", 
+    "MySQL", "PowerBook", "PowerPoint", "QuickTime", "TextEdit", "TextMate", "VMware", "WebKit", 
+    "Wi-Fi", "Xcode", "Xserve", "XMLHttpRequest"]);
+  
+  return line;
+}
+
+function fixProductNames(text, propernames) {
+  propernames.forEach(function(name) {
+    text = text.replace(RegExp(name, "gi"), name);
+  });
+  return text;
 }
 
 add_button({
