@@ -11,9 +11,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.1</string>
+	<string>1.1.0</string>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>3</string>
 	<key>Chrome</key>
 	<dict/>
 	<key>Content</key>
@@ -57,8 +57,8 @@
 		</dict>
 	</dict>
 	<key>Update Manifest URL</key>
-	<string>http://labs.gampleman.eu/update.plist</string>
+	<string>http://gampleman.github.com/SE-Editor-Toolkit/updates.plist</string>
 	<key>Website</key>
-	<string>http://gampleman.eu</string>
+	<string>http://stackapps.com/questions/2209/se-editor-toolkit</string>
 </dict>
 </plist>
