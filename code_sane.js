@@ -1,4 +1,4 @@
-add_button({
+add_button({ // defined in toolbar.js
   title: "Make code sane",
   id: 'sane',
   name: '&lt;',

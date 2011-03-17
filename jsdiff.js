@@ -218,6 +218,5 @@ window.addEventListener('load', function() {
 
   document.getElementById('post-editor').appendChild(el);
   
-  
   document.getElementById('post-editor').insertBefore(cont, document.getElementById('wmd-preview'));
 });

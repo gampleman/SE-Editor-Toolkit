@@ -1,5 +1,5 @@
 /*
-  This function does all the changes to the code in a serries of replace steps.
+  This function does all the changes to the code in a series of replace steps.
 */
 function correct(line) {
   // words to capitalize
@@ -15,7 +15,7 @@ function correct(line) {
   .replace(/( |^)i ?m /ig, "$1I'm ")
   .replace(/( |^)u /g, "$1you ")
   .replace(/( |^)ur /g, "$1your " )
-  .replace(/\bcud\b/ig, " could ")
+  .replace(/\bcud\b/ig, "could")
   .replace(/\bb4\b/ig, "before")
   // these ' are a fricking effort to type, eh?
   .replace(/ (can|doesn|won|hasn|isn)t /ig, " $1't ")
@@ -40,14 +40,15 @@ function correct(line) {
       return  arguments[1].trim() + " " + arguments[2].toUpperCase();
     }
   })
-  //.replace(/\. ?\. ?/g, ".")
   .replace(/ *\.( ?\.)+ */g, "... ")
   .replace(/ *([\?\!] ?)+ */g, "$1")
   //correct stuff messed up by this script
   .replace(/\. (\d)/g, ".$1") // digits tend to be version numbers or numerals
   // use of comma is the most common, see http://english.stackexchange.com/questions/16172
-  .replace(/e\. *G\.\,? (.)/gi, function() { return "e.g., " + arguments[1].toLowerCase()})
-  .replace(/i\. *e\. (.)/gi, function() { return "i.e. " + arguments[1].toLowerCase()})
+  .replace(/\be\.? *G\.?\,? +(.)/gi, function() { return "e.g., " + arguments[1].toLowerCase()})
+  //too bad it's also short for Internet Explorer (it can screw up your js just by it's mere existence)
+  .replace(/\bi\. *e\. (.)/gi, function() { return "i.e. " + arguments[1].toLowerCase()})
+  // Use the words defined at the top
   .replace(RegExp('\\b(?:(' + words.join(')|(') + '))\\b', 'ig'), function(m) {
     for(var a = arguments.length - 2; a--;) {
       if(arguments[a]) {
@@ -57,12 +58,12 @@ function correct(line) {
   });
 }
 
-
-
-add_button({
+add_button({ // defined in toolbar.js
   name: 'Autocorrect',
   pos: 80,
   callback: function() {
-    actOnSelection(function(txt, isSelection) { return clean(txt.replace(/\t/g, "    "), correct); }, true);
+    actOnSelection(function(txt, isSelection) {
+      return clean(txt.replace(/\t/g, "    "), correct); 
+    }, true);
   }
 });
