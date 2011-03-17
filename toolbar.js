@@ -31,20 +31,28 @@ function clean(txt, callback) {
   Optionally calls the callback on the #title as well.
 */
 function actOnSelection (callback, actOnTitle) {
-  var el = document.getElementById('wmd-input');
+
+  var el = activeElement;
   if(el.selectionStart == el.selectionEnd) {
     el.value = callback(el.value, false).replace(/^\s+/, "");
   } else { // The user has a block of text selected, work only on the selected bit
-    el.value = el.value.substring(0, el.selectionStart) + callback(el.value.substring(el.selectionStart, el.selectionEnd), true) + el.value.substring(el.selectionEnd);
+    var s   = el.selectionStart;
+    var txt = callback(el.value.substring(s, el.selectionEnd), true);
+    el.value = el.value.substring(0, s) + txt  + el.value.substring(el.selectionEnd);
+    el.setSelectionRange(s, s + txt.length);
   }
-  if(actOnTitle) {
+  if(actOnTitle && el != document.getElementById('title')) {
     document.getElementById('title').value = callback(document.getElementById('title').value);
   }
   change();
   switchToDiff();
 }
 
-var buttons = [];
+var buttons = [], activeElement;
+
+function trackActive(event) {
+  activeElement = event.target;
+}
 
 /*
   Constructs a button in the toolbar.
@@ -63,12 +71,15 @@ function add_button(obj) {
 
 window.addEventListener('load', function() {
   var d = document.createElement('div');
-  
+  activeElement = document.getElementById('wmd-input');
+  activeElement.focus();
+  document.getElementById('wmd-input').addEventListener('focus', trackActive, false);
+  document.getElementById('title').addEventListener('focus', trackActive, false);
   
   buttons.forEach(function(b) {
     d.innerHTML = '<li class="wmd-button" id="'+b.id+'-button" title="'+b.title+'" style="background-position: 15px -200px; right: '+b.pos.toString()+'px; top: 3px"><a href="#">'+b.name+'</a></li>';
     document.querySelector('#wmd-button-row').appendChild(d.children[0]);
-    document.getElementById(b.id + '-button').addEventListener('click', b.callback, false);
+    document.getElementById(b.id + '-button').addEventListener('click', function(ev) { console.log(ev);b.callback(); ev.preventDefault(); }, false);
   });
   
 }, false);
