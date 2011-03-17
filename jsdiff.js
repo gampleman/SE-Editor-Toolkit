@@ -163,12 +163,12 @@ function diff( o, n ) {
 
 var previewing = true;
 var toggle;
-var orig = document.getElementById('wmd-input').value;
+var orig = '# ' + document.getElementById('title').value + "\n\n" + document.getElementById('wmd-input').value;
 
 /* Event handler for keup & change events */
 function change() {
   el = document.querySelector('#post-editor>#diff')
-  el.innerHTML = diffString(orig, document.getElementById('wmd-input').value);
+  el.innerHTML = diffString(orig, '# ' + document.getElementById('title').value + "\n\n" + document.getElementById('wmd-input').value);
 }
 
 function toggleMode() {
