@@ -79,7 +79,7 @@ window.addEventListener('load', function() {
   buttons.forEach(function(b) {
     d.innerHTML = '<li class="wmd-button" id="'+b.id+'-button" title="'+b.title+'" style="background-position: 15px -200px; right: '+b.pos.toString()+'px; top: 3px"><a href="#">'+b.name+'</a></li>';
     document.querySelector('#wmd-button-row').appendChild(d.children[0]);
-    document.getElementById(b.id + '-button').addEventListener('click', function(ev) { console.log(ev);b.callback(); ev.preventDefault(); }, false);
+    document.getElementById(b.id + '-button').addEventListener('click', function(ev) { b.callback(); ev.preventDefault(); }, false);
   });
   
 }, false);
