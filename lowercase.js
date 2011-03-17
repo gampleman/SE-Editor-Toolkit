@@ -8,7 +8,7 @@
  */
 
 String.prototype.toTitleCase = function() {
-    return this.replace(/([\w&`'‘’"“.@:\/\{\(\[<>_]+-? *)/g, function(match, p1, index, title) {
+    return this.toLowerCase().replace(/([\w&`'‘’"“.@:\/\{\(\[<>_]+-? *)/g, function(match, p1, index, title) {
         if (index > 0 && title.charAt(index - 2) !== ":" &&
         	match.search(/^(a(nd?|s|t)?|b(ut|y)|en|for|i[fn]|o[fnr]|t(he|o)|vs?\.?|via)[ \-]/i) > -1)
             return match.toLowerCase();
