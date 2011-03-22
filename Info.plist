@@ -22,12 +22,8 @@
 		<dict>
 			<key>End</key>
 			<array>
-				<string>toolbar.js</string>
-				<string>jsdiff.js</string>
-				<string>lowercase.js</string>
-				<string>autocorrect.js</string>
-				<string>code_sane.js</string>
-				<string>search.js</string>
+				<string>resig_diff.js</string>
+				<string>concatenation.js</string>
 			</array>
 		</dict>
 		<key>Whitelist</key>
