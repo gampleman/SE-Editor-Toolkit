@@ -41,23 +41,23 @@ function diffString( o, n ) {
 
   if (out.n.length == 0) {
       for (var i = 0; i < out.o.length; i++) {
-        str += '<span class="diff-delete">' + escape(out.o[i]) + oSpace[i] + "</span>";
+        str += '<span class="diff-delete">' + out.o[i] + oSpace[i] + "</span>";
       }
   } else {
     if (out.n[0].text == null) {
       for (n = 0; n < out.o.length && out.o[n].text == null; n++) {
-        str += '<span class="diff-delete">' + escape(out.o[n]) + oSpace[n] + "</span>";
+        str += '<span class="diff-delete">' + out.o[n] + oSpace[n] + "</span>";
       }
     }
 
     for ( var i = 0; i < out.n.length; i++ ) {
       if (out.n[i].text == null) {
-        str += '<span class="diff-add">' + escape(out.n[i]) + nSpace[i] + "</span>";
+        str += '<span class="diff-add">' + out.n[i] + nSpace[i] + "</span>";
       } else {
         var pre = "";
 
         for (n = out.n[i].row + 1; n < out.o.length && out.o[n].text == null; n++ ) {
-          pre += '<span class="diff-delete">' + escape(out.o[n]) + oSpace[n] + "</span>";
+          pre += '<span class="diff-delete">' + out.o[n] + oSpace[n] + "</span>";
         }
         str += " " + out.n[i].text + nSpace[i] + pre;
       }
@@ -159,64 +159,3 @@ function diff( o, n ) {
   return { o: o, n: n };
 }
 
-
-
-var previewing = true;
-var toggle;
-var orig = '# ' + document.getElementById('title').value + "\n\n" + document.getElementById('wmd-input').value;
-
-/* Event handler for keup & change events */
-function change() {
-  el = document.querySelector('#post-editor>#diff')
-  el.innerHTML = diffString(orig, '# ' + document.getElementById('title').value + "\n\n" + document.getElementById('wmd-input').value);
-}
-
-function toggleMode() {
-  if(previewing) {
-    switchToDiff();
-  } else {
-    switchToPreview();
-  }
-  return false;
-}
-
-function switchToDiff() {
-  if(previewing) {
-    document.getElementById('wmd-preview').style.display = 'none';
-    document.getElementById('diff').style.display = 'block';
-    toggle.innerText = "Show preview";
-  } 
-  previewing = false;
-  return false;
-}
-
-function switchToPreview() {
-  if(!previewing) {
-    document.getElementById('wmd-preview').style.display = 'block';
-    document.getElementById('diff').style.display = 'none';
-    toggle.innerText = "Show diff";
-  }
-  previewing = true;
-  return false;
-}
-
-
-window.addEventListener('load', function() {
-  document.getElementById('wmd-input').addEventListener('change', change, false);
-  document.getElementById('wmd-input').addEventListener('keyup', change, false);
-  toggle = document.createElement('a');
-  toggle.addEventListener('click', toggleMode, false);
-  toggle.innerText = "Show diff";
-  var cont = document.createElement('div');
-  cont.style.marginTop = "1em";
-  cont.appendChild(toggle);
-  
-  el = document.createElement('pre');
-  el.id = 'diff';
-  el.style.whiteSpace = 'pre-wrap';
-  el.style.display = 'none';
-
-  document.getElementById('post-editor').appendChild(el);
-  
-  document.getElementById('post-editor').insertBefore(cont, document.getElementById('wmd-preview'));
-});
