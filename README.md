@@ -6,7 +6,13 @@ Adds a couple of features for easier editing of (mainly crappy) questions on the
 Contributing
 ------------
 
-The code should be reasonably readable where `toolbar.js` is the file containing some common logic and then each button has it's own file. `jsdiff.js` (surprisingly enough) contains the diffing functionality.
+The code is written in coffeescript and I use this command to compile it:
+
+    $ coffee --join -b --compile src/toolbar.coffee src/diff.coffee src/autocorrect.coffee src/code_sane.coffee src/search.coffee src/lowercase.coffee
+    
+If you've never written coffeescript don't worry, it's very similar to JavaScript but has a few Ruby and Python influences to it.
+
+The code should be very readable where `toolbar.coffee` is the file containing some common logic and then each button has it's own file. `diff.coffee` (surprisingly enough) contains the diffing functionality.
 
 Procedure is simple, fork, edit, send pull request. The plugin should be easy to port to any other browser, it is built with very basic js (it uses `querySelector` in a few cases, but this is not necessary and can be easily removed). I'm happy to maintain other versions for other browsers as long as you provide a build script to automatically build the extension from these source files.
 
