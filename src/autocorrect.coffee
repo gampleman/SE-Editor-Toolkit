@@ -39,7 +39,7 @@ Toolbar.add_button
         # basic typography
         .replace(/[ ]*([\:\,]) */g,        "$1 ")
         # uses a negative lookahead to skip common filenames (that can''t be begenings of words)
-        .replace(/([\.\?\!] *|^)(?!rb|txt|hs|x?h?t?ml|htaccess|dll|wav|mp3)(.)(?![\s\.])/g, ->
+        .replace(/([\.\?\!] *|^)(?!rb|txt|hs|x?h?t?ml|htaccess|dll|wav|mp3|exe|ini|htpasswd)(.)(?![\s\.])/g, ->
           if arguments[1].length == 0
             arguments[2].toUpperCase();
           else 
