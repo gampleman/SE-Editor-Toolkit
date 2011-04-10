@@ -150,7 +150,7 @@ Toolbar.add_button({
       return Toolbar.clean(txt.replace(/\t/g, "    "), function(line) {
         var words;
         words = ["AMD", "AppleScript", "ASUS", "ATI", "Bluetooth", "DivX", "DVD", "Eee PC", "FireWire", "GarageBand", "GHz", "iBookstore", "iCal", "iChat", "iLife", "iMac", "iMovie", "iOS", "iPad", "iPhone", "iPhoto", "iPod", "iTunes", "iWeb", "iWork", "JavaScript", "jQuery", "Lenovo", "MacBook", "MacPorts", "MHz", "MobileMe", "MySQL", "Nvidia", "OS X", "PowerBook", "PowerPoint", "QuickTime", "SSD", "TextEdit", "TextMate", "ThinkPad", "USB", "VMware", "WebKit", "Wi-Fi", "Windows XP", "WordPress", "Xcode", "XMLHttpRequest", "Xserve"];
-        return line.replace(/( |^)i( |')/g, "$1I$2").replace(/( |^)i ?m /ig, "$1I'm ").replace(/( |^)u /g, "$1you ").replace(/( |^)ur /g, "$1your ").replace(/\bcud\b/ig, "could").replace(/\bb4\b/ig, "before").replace(/\b(can|doesn|won|hasn|isn|didn)t\b/ig, "$1't").replace(/\b(a)n(?= +(?![aeiou]|HTML))/gi, "$1").replace(/\b(a)(?= +[aeiou])/gi, "$1n").replace(/\b(a)lot\b/gi, "$1 lot").replace(/^(H(i|[iy][ea]|ell?o)|greet(ings|z))(\sto)?\s?(every(one|body)|expert|geek|all|friend|there|guy|people|folk)?s?\s*[\!\.\,\:]*\s*/ig, "").replace(/^(thx|thanks?|cheers|thanx|tia)\s?((in advance)|you)?[\.\!\,]*/gi, "").replace(/( |^)pl[sz] /i, " please ").replace(/[ ]*([\:\,]) */g, "$1 ").replace(/([\.\?\!] *|^)(?!rb|txt|hs|x?h?t?ml|htaccess|dll|wav|mp3)(.)(?![\s\.])/g, function() {
+        return line.replace(/( |^)i( |')/g, "$1I$2").replace(/( |^)i ?m /ig, "$1I'm ").replace(/( |^)u /g, "$1you ").replace(/( |^)ur /g, "$1your ").replace(/\bcud\b/ig, "could").replace(/\bb4\b/ig, "before").replace(/\b(can|doesn|won|hasn|isn|didn)t\b/ig, "$1't").replace(/\b(a)n(?= +(?![aeiou]|HTML|user))/gi, "$1").replace(/\b(a)(?= +[aeiou])/gi, "$1n").replace(/\b(a)lot\b/gi, "$1 lot").replace(/^(H(i|[eaiy][yiea]|ell?o)|greet(ings|z))(\sto)?\s?(every(one|body)|expert|geek|all|friend|there|guy|people|folk)?s?\s*[\!\.\,\:]*\s*/ig, "").replace(/^(thx|thanks?|cheers|thanx|tia)\s?((in advance)|you)?[\.\!\,]*/gi, "").replace(/( |^)pl[sz] /i, " please ").replace(/[ ]*([\:\,]) */g, "$1 ").replace(/([\.\?\!] *|^)(?!rb|txt|hs|x?h?t?ml|htaccess|dll|wav|mp3)(.)(?![\s\.])/g, function() {
           if (arguments[1].length === 0) {
             return arguments[2].toUpperCase();
           } else {
@@ -186,7 +186,7 @@ Toolbar.add_button({
       txt = txt.replace(/\t/g, "    ").replace(/\n {4,}/g, "\n    ");
       if ((_ref = document.getElementById('tagnames')) != null ? _ref.value.match(/(\b(c|c\#|c\+\+)\b|objective-c|cocoa|java|android|jquery|actionscript|javascript|ecmascript|scala|php|css)/) : void 0) {
         indent = 0;
-        txt = txt.replace(/^( {4,})(.+?)(\{?)$/gm, function(t, base, str, bracket) {
+        txt = txt.replace(/^( {4,})(.*?)(\{?)$/gm, function(_, base, str, bracket) {
           var i;
           if (str.indexOf("}") !== -1) {
             indent--;
@@ -323,7 +323,10 @@ Toolbar.add_button({
   callback: function() {
     return Toolbar.actOnSelection(function(txt, isSelection) {
       if (isSelection) {
-        if (txt.toLowerCase() === txt) {
+        console.log(txt);
+        if ((txt.toLowerCase() === txt && txt === txt.toTitleCase())) {
+          return txt.toUpperCase();
+        } else if (txt.toLowerCase() === txt) {
           return txt.toTitleCase();
         } else if (txt.toTitleCase() === txt) {
           return txt.toUpperCase();

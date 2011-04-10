@@ -29,7 +29,7 @@ Toolbar.add_button
         # get rid of greetings and gratitude (would be nice to get rid of signature as well
         #  but I have no clue how)
         # as per  http://meta.stackoverflow.com/questions/2950
-        .replace(/// ^( H(i|[iy][ea]|ell?o) |  greet(ings|z) ) # hi hello greetings
+        .replace(/// ^( H(i|[eaiy][yiea]|ell?o) |  greet(ings|z) ) # hi hello greetings
           (\s  to  )? \s?                                      # to
           ( every(one|body) | expert | geek | all | friend | there | guy | people | folk )?s?
           \s*[\!\.\,\:]*\s*///ig, "")

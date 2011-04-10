@@ -26,7 +26,9 @@ Toolbar.add_button
   callback: ->
     Toolbar.actOnSelection (txt, isSelection) ->
       if isSelection
-        if txt.toLowerCase() == txt
+        if txt.toLowerCase() == txt == txt.toTitleCase() 
+          txt.toUpperCase()
+        else if txt.toLowerCase() == txt
           txt.toTitleCase()
         else if txt.toTitleCase() == txt
           txt.toUpperCase()

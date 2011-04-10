@@ -14,14 +14,14 @@ Toolbar.add_button
         jquery | actionscript | javascript | ecmascript | # Ecmascript derivatives
         scala | php | css                                 # others (don't be shy to add)
       ) ///                        
-
         indent = 0
-        txt = txt.replace /^( {4,})(.+?)(\{?)$/gm, (t, base, str, bracket) ->
+        txt = txt.replace /^( {4,})(.*?)(\{?)$/gm, (_, base, str, bracket) ->
           if str.indexOf("}") != -1 then indent--
           i = 0
-          base += "  " while i++ < indent 
-          if bracket == "{" then indent++
+          base += "  "   while i++ < indent 
+          indent++       if bracket == "{"
           indent = Math.max(indent, 0)
           base + str + bracket
+      
       txt
   
