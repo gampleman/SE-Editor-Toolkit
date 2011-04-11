@@ -6,11 +6,20 @@ Adds a couple of features for easier editing of (mainly crappy) questions on the
 Contributing
 ------------
 
-The code is written in coffeescript and I use this command to compile it:
+The code is written in [CoffeeScript](http://jashkenas.github.com/coffee-script/). Compile it with:
 
-    $ coffee --join -b --compile src/toolbar.coffee src/diff.coffee src/autocorrect.coffee src/code_sane.coffee src/search.coffee src/lowercase.coffee
+    $ cake build
     
-If you've never written coffeescript don't worry, it's very similar to JavaScript but has a few Ruby and Python influences to it.
+Other commands available are:
+
+    $ cake
+    cake build                # Compile the CoffeeScript source.
+    cake build:safari         # Compile and reload the Safari Extension
+    cake build:userscript     # Compile and transform into UserScript version
+    cake deploy:safari        # Save the Safari Extension bundle
+    
+    
+If you've never written CoffeeScript don't worry, it's very similar to JavaScript but has a few Ruby and Python influences to it.
 
 The code should be very readable where `toolbar.coffee` is the file containing some common logic and then each button has it's own file. `diff.coffee` (surprisingly enough) contains the diffing functionality.
 
