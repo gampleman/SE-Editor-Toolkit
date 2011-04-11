@@ -9,7 +9,11 @@ Diff =
     
   theString: ->
     if document.getElementById('title')
-      "# #{document.getElementById('title').value}\n\n#{escape(document.getElementById('wmd-input').value)}"
+      """
+      ##{document.getElementById('title').value}
+      
+      #{escape(document.getElementById('wmd-input').value)}
+      """
     else
       document.getElementById('wmd-input').value
   

@@ -1,14 +1,5 @@
-var Diff, Toolbar, proxy;
-proxy = function(fn, thisObject) {
-  var retproxy;
-  retproxy = function() {
-    return fn.apply(thisObject || this, arguments);
-  };
-  if (fn) {
-    retproxy.guid = fn.guid = fn.guid || retproxy.guid;
-  }
-  return retproxy;
-};
+var Diff, Toolbar;
+var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 Toolbar = {
   buttons: [],
   clean: function(txt, callback) {
@@ -94,7 +85,7 @@ Diff = {
   },
   theString: function() {
     if (document.getElementById('title')) {
-      return "# " + (document.getElementById('title').value) + "\n\n" + (escape(document.getElementById('wmd-input').value));
+      return "#" + (document.getElementById('title').value) + "\n\n" + (escape(document.getElementById('wmd-input').value));
     } else {
       return document.getElementById('wmd-input').value;
     }
@@ -117,16 +108,27 @@ Diff = {
   },
   setup: function() {
     var cont, el, _ref, _ref2;
+    console.log("setup", this);
     if ((_ref = document.getElementById('title')) != null) {
-      _ref.addEventListener('change', proxy(this.change, this), false);
+      _ref.addEventListener('change', __bind(function() {
+        return this.change();
+      }, this));
     }
     if ((_ref2 = document.getElementById('title')) != null) {
-      _ref2.addEventListener('keyup', proxy(this.change, this), false);
+      _ref2.addEventListener('keyup', __bind(function() {
+        return this.change();
+      }, this));
     }
-    document.getElementById('wmd-input').addEventListener('change', proxy(this.change, this), false);
-    document.getElementById('wmd-input').addEventListener('keyup', proxy(this.change, this), false);
+    document.getElementById('wmd-input').addEventListener('change', __bind(function() {
+      return this.change();
+    }, this));
+    document.getElementById('wmd-input').addEventListener('keyup', __bind(function() {
+      return this.change();
+    }, this));
     this.toggle = document.createElement('a');
-    this.toggle.addEventListener('click', proxy(this.toggleMode, this), false);
+    this.toggle.addEventListener('click', __bind(function() {
+      return this.toggleMode();
+    }, this));
     this.toggle.innerText = "Show diff";
     cont = document.createElement('div');
     cont.style.marginTop = "1em";
@@ -141,16 +143,19 @@ Diff = {
     return this.orig = this.theString();
   }
 };
-window.addEventListener('load', proxy(Diff.setup, Diff));
+window.addEventListener('load', function() {
+  return Diff.setup.apply(Diff);
+});
 Toolbar.add_button({
   name: 'Autocorrect',
   pos: 80,
   callback: function() {
+    console.log("Colio");
     return Toolbar.actOnSelection(function(txt, isSelection) {
       return Toolbar.clean(txt.replace(/\t/g, "    "), function(line) {
         var words;
         words = ["AMD", "AppleScript", "ASUS", "ATI", "Bluetooth", "DivX", "DVD", "Eee PC", "FireWire", "GarageBand", "GHz", "iBookstore", "iCal", "iChat", "iLife", "iMac", "iMovie", "iOS", "iPad", "iPhone", "iPhoto", "iPod", "iTunes", "iWeb", "iWork", "JavaScript", "jQuery", "Lenovo", "MacBook", "MacPorts", "MHz", "MobileMe", "MySQL", "Nvidia", "OS X", "PowerBook", "PowerPoint", "QuickTime", "SSD", "TextEdit", "TextMate", "ThinkPad", "USB", "VMware", "WebKit", "Wi-Fi", "Windows XP", "WordPress", "Xcode", "XMLHttpRequest", "Xserve"];
-        return line.replace(/( |^)i( |')/g, "$1I$2").replace(/( |^)i ?m /ig, "$1I'm ").replace(/( |^)u /g, "$1you ").replace(/( |^)ur /g, "$1your ").replace(/\bcud\b/ig, "could").replace(/\bb4\b/ig, "before").replace(/\b(can|doesn|won|hasn|isn|didn)t\b/ig, "$1't").replace(/\b(a)n(?= +(?![aeiou]|HTML|user))/gi, "$1").replace(/\b(a)(?= +[aeiou])/gi, "$1n").replace(/\b(a)lot\b/gi, "$1 lot").replace(/^(H(i|[eaiy][yiea]|ell?o)|greet(ings|z))(\sto)?\s?(every(one|body)|expert|geek|all|friend|there|guy|people|folk)?s?\s*[\!\.\,\:]*\s*/ig, "").replace(/^(thx|thanks?|cheers|thanx|tia)\s?((in advance)|you)?[\.\!\,]*/gi, "").replace(/( |^)pl[sz] /i, " please ").replace(/[ ]*([\:\,]) */g, "$1 ").replace(/([\.\?\!] *|^)(?!rb|txt|hs|x?h?t?ml|htaccess|dll|wav|mp3)(.)(?![\s\.])/g, function() {
+        return line.replace(/( |^)i( |')/g, "$1I$2").replace(/( |^)i ?m /ig, "$1I'm ").replace(/( |^)u /g, "$1you ").replace(/( |^)ur /g, "$1your ").replace(/\bcud\b/ig, "could").replace(/\bb4\b/ig, "before").replace(/\b(can|doesn|won|hasn|isn|didn)t\b/ig, "$1't").replace(/\b(a)n(?= +(?![aeiou]|HTML|user))/gi, "$1").replace(/\b(a)(?= +[aeiou])/gi, "$1n").replace(/\b(a)lot\b/gi, "$1 lot").replace(/^(H(i|[eaiy][yiea]|ell?o)|greet(ings|z))(\sto)?\s?(every(one|body)|expert|geek|all|friend|there|guy|people|folk)?s?\s*[\!\.\,\:]*\s*/ig, "").replace(/^(thx|thanks?|cheers|thanx|tia)\s?((in advance)|you)?[\.\!\,]*/gi, "").replace(/( |^)pl[sz] /i, " please ").replace(/[ ]*([\:\,]) */g, "$1 ").replace(/([\.\?\!] *|^)(?!rb|txt|hs|x?h?t?ml|htaccess|dll|wav|mp3|exe|ini|htpasswd)(.)(?![\s\.])/g, function() {
           if (arguments[1].length === 0) {
             return arguments[2].toUpperCase();
           } else {
@@ -257,13 +262,17 @@ Toolbar.add_button({
     d.innerHTML = '<ul id="snr-ui" style="margin: 0; padding: 0">\n  <li class="wmd-button" style="width: 100%; background-image: none">\n    <form id="snr-form" action="#">\n      <input type=text id="search-find" placeholder="Search (regexp)" />\n      <input type=text id="search-replace" placeholder="Replace" />\n      <button id="search-next">Next</button><button id="search-rnf">Replace &amp; Find</button>\n      <button id="search-replaceall">Replace all</button>\n      <input type=checkbox value=1 id="search-casesensitive" />\n      <label for="search-casesensitive">Case sensitive</label>\n    </form>\n  </li>\n</ul>';
     document.querySelector('#wmd-button-bar').appendChild(d.children[0]);
     document.querySelector('#wmd-button-bar').style.height = "50px";
-    document.getElementById('search-find').addEventListener('change', proxy(this.recreateRegexp, this), false);
-    document.getElementById('search-casesensitive').addEventListener('change', proxy(this.recreateRegexp, this), false);
-    document.getElementById('snr-form').addEventListener('submit', proxy(function(ev) {
+    document.getElementById('search-find').addEventListener('change', (__bind(function() {
+      return this.recreateRegexp();
+    }, this)), false);
+    document.getElementById('search-casesensitive').addEventListener('change', (__bind(function() {
+      return this.recreateRegexp();
+    }, this)), false);
+    document.getElementById('snr-form').addEventListener('submit', __bind(function(ev) {
       ev.preventDefault();
       return this.doSearch();
     }, this), false);
-    document.getElementById('search-next').addEventListener('click', proxy(function(ev) {
+    document.getElementById('search-next').addEventListener('click', __bind(function(ev) {
       ev.preventDefault();
       if (this.current_re == null) {
         return this.doSearch();
@@ -271,7 +280,7 @@ Toolbar.add_button({
         return this.findNext();
       }
     }, this));
-    document.getElementById('search-rnf').addEventListener('click', proxy(function(ev) {
+    document.getElementById('search-rnf').addEventListener('click', __bind(function(ev) {
       var el, re;
       ev.preventDefault();
       el = document.getElementById('wmd-input');
@@ -283,7 +292,7 @@ Toolbar.add_button({
       this.findNext();
       return Diff.change();
     }, this));
-    return document.getElementById('search-replaceall').addEventListener('click', proxy(function(ev) {
+    return document.getElementById('search-replaceall').addEventListener('click', __bind(function(ev) {
       var el;
       ev.preventDefault();
       el = document.getElementById('wmd-input');
@@ -323,7 +332,6 @@ Toolbar.add_button({
   callback: function() {
     return Toolbar.actOnSelection(function(txt, isSelection) {
       if (isSelection) {
-        console.log(txt);
         if ((txt.toLowerCase() === txt && txt === txt.toTitleCase())) {
           return txt.toUpperCase();
         } else if (txt.toLowerCase() === txt) {
