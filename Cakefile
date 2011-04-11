@@ -5,7 +5,8 @@ fs     = require 'fs'
 strip_special = (contents) -> contents.replace(///\\ ///g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"')
 
 task 'build', 'Compile the CoffeeScript source.', (options) ->
-  exec 'coffee --join -b --compile src/toolbar.coffee src/diff.coffee src/autocorrect.coffee src/code_sane.coffee src/search.coffee src/togglecase.coffee', (err) -> if err then throw err else console.log "Code build succesful."
+  exec 'coffee --join -b --compile src/toolbar.coffee src/diff.coffee src/autocorrect.coffee src/code_sane.coffee src/search.coffee src/togglecase.coffee', (err) -> 
+    if err then throw err else console.log "Code build succesful."
 
 task 'build:safari', 'Compile and reload the Safari Extension', (options) ->
   invoke 'build'
@@ -55,6 +56,7 @@ option '-v', '--version [VERSION]', 'Publish as version'
 task 'deploy:safari', 'Save the Safari Extension bundle', (options) ->
   throw "ArgumentError" unless options.version
   invoke 'build'
+  file_name = "#{options.build_name || "latest"}.safariextz"
   exec """osascript -e '
    tell application "System Events"
    	tell process "Safari"
@@ -64,14 +66,30 @@ task 'deploy:safari', 'Save the Safari Extension bundle', (options) ->
       click button "Reload"  of UI element "ReloadUninstallSE Editor Toolkit"  of UI element 1 of scroll area 1 of window "Extension Builder"
    		click button "Build Package…" of group 4 of UI element 1 of scroll area 1 of window "Extension Builder"
    		delay 1
-   		set value of text field 1 of sheet 1 of window "Extension Builder" to "#{options.build_name || "latest"}.safariextz"
+   		set value of text field 1 of sheet 1 of window "Extension Builder" to "#{file_name}"
    		click button "Save" of sheet 1 of window "Extension Builder"
-   		click button "Replace"  of sheet 1 of sheet 1 of window "Extension Builder" 
+   		click button "Replace"  of sheet 1 of sheet 1 of window "Extension Builder"
+   		num
    	end tell
    end tell'
-  """, (err) -> if err 
+  """, (err, version) -> if err 
     throw err 
   else 
-    exec 'git checkout gh-pages'
-    fs.renameSync("../#{options.build_name || "latest"}.safariextz", "./#{options.build_name || "latest"}.safariextz")
-  
+    exec 'git checkout gh-pages', (err) -> throw err if err
+    fs.renameSync "../#{file_name}", "./#{file_name}"
+    fs.writeFileSync 'updates.plist', fs.readFileSync('updates.plist', 'utf8').replace(///
+    <key>CFBundleVersion</key>\n
+    \s*<string>\d+</string>\n
+    \s*<key>CFBundleShortVersionString</key>\n
+    \s*<string>[\d\.]+</string>
+    ///,
+    """
+    <key>CFBundleVersion</key>
+         <string>#{version}</string>
+         <key>CFBundleShortVersionString</key>
+         <string>#{options.version}</string>
+    """), 'utf8'
+    
+    exec "git add #{file_name}"
+    exec "git commit #{file_name} updates.plist -m 'Released version #{options.version}'"
+    exec "git checkout master"
