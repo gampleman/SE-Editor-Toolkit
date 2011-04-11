@@ -1,16 +1,3 @@
-## Toolbar.js
-#
-# We start of the code by providing some common functionality and encapsulating common logic.
-#
-# We start by defininf the proxy function which is inspired by `jQuery.proxy`. This function is used throught mainly for binding event and maintaining their context (`this`).
-proxy = (fn, thisObject) ->
-	retproxy = () ->
-		fn.apply(thisObject || this, arguments)
-	if fn 
-	  retproxy.guid = fn.guid = fn.guid || retproxy.guid 
-  retproxy
-
-
 # Next we define the `Toolbar` object. It's role is to manage all of the buttons and provide common functionality.
 Toolbar =
   buttons: [] # Holds the buttons.

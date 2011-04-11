@@ -28,12 +28,13 @@ Diff =
     @previewing = true
   
   setup: ->
-    document.getElementById('title')?.addEventListener('change', proxy(@change, this), false)
-    document.getElementById('title')?.addEventListener('keyup', proxy(@change, this), false)
-    document.getElementById('wmd-input').addEventListener('change', proxy(@change, this), false)
-    document.getElementById('wmd-input').addEventListener('keyup', proxy(@change, this), false)
+    console.log "setup", this
+    document.getElementById('title')?.addEventListener 'change', => @change()
+    document.getElementById('title')?.addEventListener 'keyup', => @change()
+    document.getElementById('wmd-input').addEventListener 'change', => @change()
+    document.getElementById('wmd-input').addEventListener 'keyup', => @change()
     @toggle = document.createElement 'a'
-    @toggle.addEventListener 'click', proxy(@toggleMode, this), false
+    @toggle.addEventListener 'click', => @toggleMode()
     @toggle.innerText = "Show diff"
     cont = document.createElement 'div'
     cont.style.marginTop = "1em"
@@ -48,4 +49,4 @@ Diff =
     @orig = @theString()
 
 
-window.addEventListener 'load', proxy(Diff.setup, Diff)
+window.addEventListener 'load', -> Diff.setup.apply Diff

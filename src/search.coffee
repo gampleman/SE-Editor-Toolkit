@@ -55,18 +55,17 @@ Toolbar.add_button
     document.querySelector('#wmd-button-bar').style.height = "50px"
   
     # The regex change, recreate it
-    document.getElementById('search-find').addEventListener('change', proxy(@recreateRegexp, this), false)
-    document.getElementById('search-casesensitive').addEventListener('change', proxy(@recreateRegexp, this), false)
+    document.getElementById('search-find').addEventListener('change', (=> @recreateRegexp()), false)
+    document.getElementById('search-casesensitive').addEventListener('change', (=> @recreateRegexp()), false)
     # Enter pressed, comence searching
-    document.getElementById('snr-form').addEventListener('submit', proxy((ev) -> 
+    document.getElementById('snr-form').addEventListener('submit', (ev) => 
       ev.preventDefault()
       @doSearch()
-    , this), false)
-    document.getElementById('search-next').addEventListener 'click', proxy((ev) ->
+    , false)
+    document.getElementById('search-next').addEventListener 'click', (ev) =>
       ev.preventDefault()
       unless @current_re? then @doSearch() else @findNext()
-    , this)
-    document.getElementById('search-rnf').addEventListener 'click', proxy((ev) ->
+    document.getElementById('search-rnf').addEventListener 'click', (ev) =>
       ev.preventDefault()
       el = document.getElementById('wmd-input')
       @doSearch() if !@current_re? || el.selectionStart == el.selectionEnd
@@ -74,12 +73,10 @@ Toolbar.add_button
       el.value = el.value.substring(0, el.selectionStart) + el.value.substring(el.selectionStart, el.selectionEnd).replace(re, document.getElementById('search-replace').value) + el.value.substring(el.selectionEnd)
       @findNext()
       Diff.change()
-    , this)
     
-    document.getElementById('search-replaceall').addEventListener 'click', proxy((ev) ->
+    document.getElementById('search-replaceall').addEventListener 'click', (ev) =>
       ev.preventDefault()
       el = document.getElementById('wmd-input')
       el.value = el.value.replace(@current_re, document.getElementById('search-replace').value)
       Diff.change()
       Diff.switchToDiff()
-    , this)
