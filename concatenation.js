@@ -150,7 +150,6 @@ Toolbar.add_button({
   name: 'Autocorrect',
   pos: 80,
   callback: function() {
-    console.log("Colio");
     return Toolbar.actOnSelection(function(txt, isSelection) {
       return Toolbar.clean(txt.replace(/\t/g, "    "), function(line) {
         var words;

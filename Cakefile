@@ -5,7 +5,7 @@ fs     = require 'fs'
 strip_special = (contents) -> contents.replace(///\\ ///g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"')
 
 task 'build', 'Compile the CoffeeScript source.', (options) ->
-  exec 'coffee --join -b --compile src/toolbar.coffee src/diff.coffee src/autocorrect.coffee src/code_sane.coffee src/search.coffee src/togglecase.coffee', (err) -> throw err if err
+  exec 'coffee --join -b --compile src/toolbar.coffee src/diff.coffee src/autocorrect.coffee src/code_sane.coffee src/search.coffee src/togglecase.coffee', (err) -> if err then throw err else console.log "Code build succesful."
 
 task 'build:safari', 'Compile and reload the Safari Extension', (options) ->
   invoke 'build'
@@ -50,17 +50,28 @@ task 'build:userscript', 'Compile and transform into UserScript version', (optio
     
   fs.writeFile 'output.user.js', js
   
-  
+option '-o', '--build_name [NAME]', 'What to name the code'
+option '-v', '--version [VERSION]', 'Publish as version'
 task 'deploy:safari', 'Save the Safari Extension bundle', (options) ->
+  throw "ArgumentError" unless options.version
   invoke 'build'
   exec """osascript -e '
    tell application "System Events"
    	tell process "Safari"
+   	  set value of text field 1 of group 22 of UI element 1 of scroll area 1 of window "Extension Builder"  to "#{options.version}"
+      set num to (value of text field 1 of group 24 of UI element 1 of scroll area 1 of window "Extension Builder") + 1
+      set value of text field 1 of group 24 of UI element 1 of scroll area 1 of window "Extension Builder" to num as string
+      click button "Reload"  of UI element "ReloadUninstallSE Editor Toolkit"  of UI element 1 of scroll area 1 of window "Extension Builder"
    		click button "Build Package…" of group 4 of UI element 1 of scroll area 1 of window "Extension Builder"
    		delay 1
    		set value of text field 1 of sheet 1 of window "Extension Builder" to "#{options.build_name || "latest"}.safariextz"
    		click button "Save" of sheet 1 of window "Extension Builder"
+   		click button "Replace"  of sheet 1 of sheet 1 of window "Extension Builder" 
    	end tell
    end tell'
-  """
+  """, (err) -> if err 
+    throw err 
+  else 
+    exec 'git checkout gh-pages'
+    fs.renameSync("../#{options.build_name || "latest"}.safariextz", "./#{options.build_name || "latest"}.safariextz")
   
