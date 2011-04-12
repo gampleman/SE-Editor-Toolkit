@@ -108,4 +108,4 @@ task 'deploy:safari', 'Save the Safari Extension bundle', (options) ->
 
 
 task 'deploy', "Deploys to server", (options) ->
-  exec "mv output.user.js ../output.user.js && git checkout gh-pages && mv ../output.user.js output.user.js && git add output.user.js && git commit -m 'Released version #{options.version}' && git checkout master && git tag #{options.version} && git push origin master --tags && git push origin gh-pages", (err) -> if err then throw err
+  exec "mv output.user.js ../output.user.js && git checkout gh-pages && mv ../output.user.js output.user.js && git add output.user.js && git commit -m 'Released version #{options.version}' && git checkout master && git tag #{options.version} && git push origin master --tags && git push origin gh-pages", (err, stdout, stderr) -> console.log stdout, stderr
