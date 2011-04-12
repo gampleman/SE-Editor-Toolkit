@@ -65,6 +65,7 @@ task 'build:userscript', 'Compile and transform into UserScript version', (optio
   
 option '-o', '--build_name [NAME]', 'What to name the code'
 option '-v', '--version [VERSION]', 'Publish as version'
+option '-V', '--deversion [V]', 'Version number'
 task 'deploy:safari', 'Save the Safari Extension bundle', (options) ->
   throw "ArgumentError" unless options.version
   invoke 'build'
@@ -72,19 +73,19 @@ task 'deploy:safari', 'Save the Safari Extension bundle', (options) ->
   exec """osascript -e '
    tell application "System Events"
    	tell process "Safari"
-   	  set value of text field 1 of group 22 of UI element 1 of scroll area 1 of window "Extension Builder"  to "#{options.version}"
-      set num to (value of text field 1 of group 24 of UI element 1 of scroll area 1 of window "Extension Builder") + 1
-      set value of text field 1 of group 24 of UI element 1 of scroll area 1 of window "Extension Builder" to num as string
-      click button "Reload"  of UI element "ReloadUninstallSE Editor Toolkit"  of UI element 1 of scroll area 1 of window "Extension Builder"
+   	  --set value of text field 1 of group 22 of UI element 1 of scroll area 1 of window "Extension Builder"  to "#{options.version}"
+      --set num to (value of text field 1 of group 24 of UI element 1 of scroll area 1 of window "Extension Builder") + 1
+      --set value of text field 1 of group 24 of UI element 1 of scroll area 1 of window "Extension Builder" to num as string
+      --click button "Reload"  of UI element "ReloadUninstallSE Editor Toolkit"  of UI element 1 of scroll area 1 of window "Extension Builder"
    		click button "Build Package…" of group 4 of UI element 1 of scroll area 1 of window "Extension Builder"
    		delay 1
    		set value of text field 1 of sheet 1 of window "Extension Builder" to "#{file_name}"
    		click button "Save" of sheet 1 of window "Extension Builder"
    		--click button "Replace"  of sheet 1 of sheet 1 of window "Extension Builder"
-   		num
+
    	end tell
    end tell'
-  """, (err, version) -> if err 
+  """, (err) -> if err 
     throw err 
   else 
     exec 'git checkout gh-pages', (err) -> if err then throw err else
@@ -97,7 +98,7 @@ task 'deploy:safari', 'Save the Safari Extension bundle', (options) ->
       ///,
       """
       <key>CFBundleVersion</key>
-           <string>#{version.trim()}</string>
+           <string>#{options.deversion.trim()}</string>
            <key>CFBundleShortVersionString</key>
            <string>#{options.version}</string>
       """)
@@ -106,4 +107,8 @@ task 'deploy:safari', 'Save the Safari Extension bundle', (options) ->
       exec "git add #{file_name} updates.plist && git commit -m 'Released version #{options.version}' && git checkout master", (err) -> if err then throw err
 
 
-
+task 'deploy', "Prepares the safari extension, user script & docs", (options) ->
+  invoke 'deploy:safari'
+  invoke 'docs'
+  invoke 'build:userscript'
+  exec "mv output.user.js ../output.user.js && git checkout gh-pages && mv ../output.user.js output.user.js && git add output.user.js && git commit -m 'Released version #{options.version}' && git checkout master && git tag #{options.version} && git push origin master --tags && git push origin gh-pages", (err) -> if err then throw err
