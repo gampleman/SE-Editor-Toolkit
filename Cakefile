@@ -12,7 +12,8 @@ task 'test', 'Run the Specs', (options) ->
         console.log stdout, stderr
         #if err then throw err else console.log stdout #unless err
         exec 'rm -r spec'
-task 'docs', 'Build the documentatio', (options) ->    
+        
+task 'docs', 'Build the annotated source code in the gh-pages branch', (options) ->    
   exec 'docco src/* && rm -r ../docs && mv docs ../docs && git checkout gh-pages && mv ../docs docs && git add docs/* && git commit -m "Added updated docs." && git checkout master', (err) -> if err then throw err
 
 task 'build', 'Compile the CoffeeScript source.', (options) ->
@@ -79,28 +80,30 @@ task 'deploy:safari', 'Save the Safari Extension bundle', (options) ->
    		delay 1
    		set value of text field 1 of sheet 1 of window "Extension Builder" to "#{file_name}"
    		click button "Save" of sheet 1 of window "Extension Builder"
-   		click button "Replace"  of sheet 1 of sheet 1 of window "Extension Builder"
+   		--click button "Replace"  of sheet 1 of sheet 1 of window "Extension Builder"
    		num
    	end tell
    end tell'
   """, (err, version) -> if err 
     throw err 
   else 
-    exec 'git checkout gh-pages', (err) -> throw err if err
-    fs.renameSync "../#{file_name}", "./#{file_name}"
-    fs.writeFileSync 'updates.plist', fs.readFileSync('updates.plist', 'utf8').replace(///
-    <key>CFBundleVersion</key>\n
-    \s*<string>\d+</string>\n
-    \s*<key>CFBundleShortVersionString</key>\n
-    \s*<string>[\d\.]+</string>
-    ///,
-    """
-    <key>CFBundleVersion</key>
-         <string>#{version}</string>
-         <key>CFBundleShortVersionString</key>
-         <string>#{options.version}</string>
-    """), 'utf8'
+    exec 'git checkout gh-pages', (err) -> if err then throw err else
+      fs.renameSync "../#{file_name}", "./#{file_name}"
+      updates = fs.readFileSync('./updates.plist', 'utf8').replace(///
+      <key>CFBundleVersion</key>\n
+      \s*<string>\d+</string>\n
+      \s*<key>CFBundleShortVersionString</key>\n
+      \s*<string>[\d\.]+</string>
+      ///,
+      """
+      <key>CFBundleVersion</key>
+           <string>#{version.trim()}</string>
+           <key>CFBundleShortVersionString</key>
+           <string>#{options.version}</string>
+      """)
+      fs.writeFileSync './updates.plist', updates, 'utf8'
     
-    exec "git add #{file_name}"
-    exec "git commit #{file_name} updates.plist -m 'Released version #{options.version}'"
-    exec "git checkout master"
+      exec "git add #{file_name} updates.plist && git commit -m 'Released version #{options.version}' && git checkout master", (err) -> if err then throw err
+
+
+
