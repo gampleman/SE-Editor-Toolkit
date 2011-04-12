@@ -1,0 +1,59 @@
+<!DOCTYPE html>  <html> <head>   <title>diff.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="autocorrect.html">                 autocorrect.coffee               </a>                                           <a class="source" href="code_sane.html">                 code_sane.coffee               </a>                                           <a class="source" href="diff.html">                 diff.coffee               </a>                                           <a class="source" href="resig_diff.html">                 resig_diff.js               </a>                                           <a class="source" href="search.html">                 search.coffee               </a>                                           <a class="source" href="togglecase.html">                 togglecase.coffee               </a>                                           <a class="source" href="toolbar.html">                 toolbar.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               diff.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nv">Diff =</span>
+  <span class="nv">change: </span><span class="o">-&gt;</span>
+    <span class="nv">el = </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#post-editor&gt;#diff&#39;</span><span class="p">)</span>
+    <span class="nv">el.innerHTML = </span><span class="nx">diffString</span><span class="p">(</span><span class="nx">@orig</span><span class="p">,</span> <span class="nx">@theString</span><span class="p">())</span>
+
+  <span class="nv">toggleMode: </span><span class="o">-&gt;</span>
+    <span class="k">if</span> <span class="nx">@previewing</span> <span class="k">then</span> <span class="nx">@switchToDiff</span><span class="p">()</span> <span class="k">else</span> <span class="nx">@switchToPreview</span><span class="p">()</span>
+    <span class="kc">false</span>
+    
+  <span class="nv">theString: </span><span class="o">-&gt;</span>
+    <span class="k">if</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+      <span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">#DIVIDER</span>
+<span class="s2">      </span>
+<span class="s2">      #{escape(document.getElementById(&#39;wmd-input&#39;).value)}</span>
+<span class="s2">      &quot;&quot;&quot;</span>
+    <span class="k">else</span>
+      <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;wmd-input&#39;</span><span class="p">).</span><span class="nx">value</span>
+  
+  <span class="nv">switchToDiff: </span><span class="o">-&gt;</span>
+    <span class="k">if</span> <span class="nx">@previewing</span>
+      <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;wmd-preview&#39;</span><span class="p">).</span><span class="nv">style.display = </span><span class="s1">&#39;none&#39;</span>
+      <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;diff&#39;</span><span class="p">).</span><span class="nv">style.display = </span><span class="s1">&#39;block&#39;</span>
+      <span class="vi">@toggle.innerText = </span><span class="s2">&quot;Show preview&quot;</span>
+    <span class="vi">@previewing = </span><span class="kc">false</span>
+    
+  <span class="nv">switchToPreview: </span><span class="o">-&gt;</span>
+    <span class="nx">unless</span> <span class="nx">@previewing</span>
+      <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;wmd-preview&#39;</span><span class="p">).</span><span class="nv">style.display = </span><span class="s1">&#39;block&#39;</span>
+      <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;diff&#39;</span><span class="p">).</span><span class="nv">style.display = </span><span class="s1">&#39;none&#39;</span>
+      <span class="vi">@toggle.innerText = </span><span class="s2">&quot;Show diff&quot;</span>
+    <span class="vi">@previewing = </span><span class="kc">true</span>
+  
+  <span class="nv">setup: </span><span class="o">-&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s2">&quot;setup&quot;</span><span class="p">,</span> <span class="k">this</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span><span class="o">?</span><span class="p">.</span><span class="nx">addEventListener</span> <span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@change</span><span class="p">()</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span><span class="o">?</span><span class="p">.</span><span class="nx">addEventListener</span> <span class="s1">&#39;keyup&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@change</span><span class="p">()</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;wmd-input&#39;</span><span class="p">).</span><span class="nx">addEventListener</span> <span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@change</span><span class="p">()</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;wmd-input&#39;</span><span class="p">).</span><span class="nx">addEventListener</span> <span class="s1">&#39;keyup&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@change</span><span class="p">()</span>
+    <span class="vi">@toggle = </span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span> <span class="s1">&#39;a&#39;</span>
+    <span class="nx">@toggle</span><span class="p">.</span><span class="nx">addEventListener</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@toggleMode</span><span class="p">()</span>
+    <span class="vi">@toggle.innerText = </span><span class="s2">&quot;Show diff&quot;</span>
+    <span class="nv">cont = </span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span> <span class="s1">&#39;div&#39;</span>
+    <span class="nv">cont.style.marginTop = </span><span class="s2">&quot;1em&quot;</span>
+    <span class="nx">cont</span><span class="p">.</span><span class="nx">appendChild</span> <span class="nx">@toggle</span>
+    <span class="vi">@previewing = </span><span class="kc">true</span>
+    <span class="nv">el = </span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span> <span class="s1">&#39;pre&#39;</span>
+    <span class="nv">el.id = </span><span class="s1">&#39;diff&#39;</span>
+    <span class="nv">el.style.whiteSpace = </span><span class="s1">&#39;pre-wrap&#39;</span>
+    <span class="nv">el.style.display = </span><span class="s1">&#39;none&#39;</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;post-editor&#39;</span><span class="p">).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;post-editor&#39;</span><span class="p">).</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">cont</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;wmd-preview&#39;</span><span class="p">))</span>
+    <span class="vi">@orig = </span><span class="nx">@theString</span><span class="p">()</span>
+
+
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span> <span class="s1">&#39;load&#39;</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="nx">Diff</span><span class="p">.</span><span class="nx">setup</span><span class="p">.</span><span class="nx">apply</span> <span class="nx">Diff</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h1>{document.getElementById('title').value}</h1>             </td>             <td class="code">               <div class="highlight"><pre>undefined</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
