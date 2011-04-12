@@ -4,9 +4,22 @@ fs     = require 'fs'
 # Function to not brake the string 
 strip_special = (contents) -> contents.replace(///\\ ///g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"')
 
+task 'test', 'Run the Specs', (options) ->
+  # Compile Coffee to js due to a bug in jasmine-node
+  exec 'coffee -b --output spec/build --compile src/*.coffee', ->
+    exec 'coffee -b --output spec --compile test/*.coffee ', (error) ->
+      if error then throw error else exec 'jasmine-node', (err, stdout, stderr) ->
+        console.log stdout, stderr
+        #if err then throw err else console.log stdout #unless err
+        exec 'rm -r spec'
+task 'docs', 'Build the documentatio', (options) ->    
+  exec 'docco src/* && rm -r ../docs && mv docs ../docs && git checkout gh-pages && mv ../docs docs && git add docs/* && git commit -m "Added updated docs." && git checkout master', (err) -> if err then throw err
+
 task 'build', 'Compile the CoffeeScript source.', (options) ->
   exec 'coffee --join -b --compile src/toolbar.coffee src/diff.coffee src/autocorrect.coffee src/code_sane.coffee src/search.coffee src/togglecase.coffee', (err) -> 
-    if err then throw err else console.log "Code build succesful."
+    if err then throw err else
+      exec 'cat src/resig_diff.js >> concatenation.js'
+      console.log "Code build succesful."
 
 task 'build:safari', 'Compile and reload the Safari Extension', (options) ->
   invoke 'build'
@@ -40,10 +53,8 @@ task 'build:userscript', 'Compile and transform into UserScript version', (optio
   exec_script.type = 'text/javascript';
   exec_script.textContent = "var load_functions = new Array();\\nfunction RegisterLoadFunction(item, ignored) { load_functions.push(item); }\\n
   """
-  # Add in the files we need
-  for file in ["concatenation.js", "resig_diff.js"]
-    # Strip off some stuff and replace the events
-    js += strip_special fs.readFileSync('concatenation.js', 'utf8').replace("window.addEventListener('load',", 'RegisterLoadFunction(')
+  
+  js += strip_special fs.readFileSync('concatenation.js', 'utf8').replace("window.addEventListener('load',", 'RegisterLoadFunction(')
   
   # Call the load functions and append to the dom
   js += "\\nfor(var i=0;i<load_functions.length;++i)\\n  load_functions[i]();\";
