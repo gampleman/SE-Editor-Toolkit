@@ -51,6 +51,7 @@ Toolbar =
     obj.id ?= obj.name.toLowerCase()
     obj.title ?= obj.name
     Toolbar.buttons.push(obj)
+    obj
   # Called onLoad. Creates the UI.
   setup: ->
     d = document.createElement 'div'

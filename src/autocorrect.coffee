@@ -14,17 +14,18 @@ Toolbar.add_button
          "Windows XP", "WordPress", "Xcode", "XMLHttpRequest", "Xserve"]
         line
         # convert pronouns from monkeglish/lolcatz
-        .replace(/( |^)i( |')/g,          "$1I$2"  )
-        .replace(/( |^)i ?m /ig,          "$1I'm " )
-        .replace(/( |^)u /g,              "$1you " )
-        .replace(/( |^)ur /g,             "$1your ")
-        .replace(/\bcud\b/ig,             "could"  )
-        .replace(/\bb4\b/ig,              "before" )
+        .replace(/\bi( |')/g,   "I$1"  )
+        .replace(/\bi ?m\b/ig,   "I'm" )
+        .replace(/\bu\b/g,       "you" )
+        .replace(/\bur\b/g,      "your")
+        .replace(/\bcud\b/ig,   "could")
+        .replace(/\bb4\b/ig,    "before")
+        .replace(/\bpl[sz]\b/i, "please")
         # these '' are a fricking effort to type, eh?
         .replace(/\b(can|doesn|won|hasn|isn|didn)t\b/ig, "$1't")
         # determiners are often a problem, special cased HTML.
         .replace(/\b(a)n(?= +(?![aeiou]|HTML|user))/gi,"$1")
-        .replace(/\b(a)(?= +[aeiou])/gi,  "$1n"     )
+        .replace(/\b(a)(?= +[aeiou](?!ser))/gi,  "$1n"     )
         .replace(/\b(a)lot\b/gi,          "$1 lot"  )
         # get rid of greetings and gratitude (would be nice to get rid of signature as well
         #  but I have no clue how)
@@ -34,12 +35,10 @@ Toolbar.add_button
           ( every(one|body) | expert | geek | all | friend | there | guy | people | folk )?s?
           \s*[\!\.\,\:]*\s*///ig, "")
         .replace(/^(thx|thanks?|cheers|thanx|tia)\s?((in advance)|you)?[\.\!\,]*/gi, "")
-        #.replace(/ple?a?se?( he?lp)?[\.\!]*/ig, "")
-        .replace(/( |^)pl[sz] /i,         " please ")
         # basic typography
-        .replace(/[ ]*([\:\,]) */g,        "$1 ")
+        .replace(/[ ]*([\:\,]) */g, "$1 ")
         # uses a negative lookahead to skip common filenames (that can't be beginnings of words)
-        .replace(/([\.\?\!] *|^)(?!rb|txt|hs|x?h?t?ml|htaccess|dll|wav|mp3|exe|ini|htpasswd)(.)(?![\s\.])/g, ->
+        .replace(/([\.\?\!] *|^)(?!rb|txt|hs|x?h?t?ml|htaccess|dll|wav|mp3|exe|ini|htpasswd)(.)/g, -> #(?![\s\.])
           if arguments[1].length == 0
             arguments[2].toUpperCase();
           else 
